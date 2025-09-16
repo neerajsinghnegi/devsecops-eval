@@ -1,0 +1,2 @@
+# Example: ignore a low severity CVE you accept
+CVE-YYYY-XXXXX

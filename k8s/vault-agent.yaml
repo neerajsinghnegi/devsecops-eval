@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-vault
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'webapp-role'
+        vault.hashicorp.com/agent-inject-secret-mongo: 'secret/data/webapp/mongo'
+    spec:
+      serviceAccountName: webapp-sa
+      containers:
+        - name: webapp
+          image: ghcr.io/your-org/devsecops-eval:latest
+          env:
+            - name: MONGO_URI
+              value: "{{- with secret "secret/data/webapp/mongo" -}}{{ .Data.data.uri }}{{- end }}"
