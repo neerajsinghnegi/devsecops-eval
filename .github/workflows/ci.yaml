@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  IMAGE_NAME: ${{ github.repository }}/devsecops-eval
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   lint-and-sast:
