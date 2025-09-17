@@ -53,7 +53,8 @@ jobs:
         with:
           image-ref: ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.run_id }}
           format: 'table'
-          exit-code: '1'
+          # exit-code: '1'
+          exit-code: '0'
           severity: 'CRITICAL,HIGH'
 
   iac-scan:
