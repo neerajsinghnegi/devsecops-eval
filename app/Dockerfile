@@ -13,7 +13,7 @@ RUN npm ci --production=false
 
 
 # Copy source
-COPY src ./src
+COPY app/src ./src
 
 
 # Build step (if any). For plain Node.js app there may be no build.
