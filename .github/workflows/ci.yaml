@@ -56,6 +56,16 @@ jobs:
           # exit-code: '1'
           exit-code: '0'
           severity: 'CRITICAL,HIGH'
+
+  iac-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          args: --out tfsec-results.sarif
+          
   publish:
     needs: [build-and-scan-image]
     runs-on: ubuntu-latest
@@ -72,12 +82,3 @@ jobs:
       - name: Push image
         run: |
           docker push ${{ vars.REGISTRY }}/${{ secrets.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:pr-${{ github.run_id }}
-
-  iac-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
-        with:
-          args: --out tfsec-results.sarif
