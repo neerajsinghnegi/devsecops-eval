@@ -56,9 +56,6 @@ jobs:
           # exit-code: '1'
           exit-code: '0'
           severity: 'CRITICAL,HIGH'
-      - name: Push image
-        run: |
-          docker push ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.run_id }}
           
   iac-scan:
     runs-on: ubuntu-latest
