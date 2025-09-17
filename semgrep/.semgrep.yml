@@ -1,12 +1,14 @@
 rules:
   - id: python-hardcoded-credentials
+    languages: [python]
     patterns:
-      - pattern: "password = '...'" # example pattern; extend for JS
+      - pattern: "password = '...'"
     message: "Hard-coded password found"
     severity: ERROR
 
   - id: js-hardcoded-credential
+    languages: [javascript, typescript]
     patterns:
-      - pattern: "MONGO_URI: '$SECRET'"
-    message: "Potential hard-coded secret"
-    severity: WARNING
+      - pattern: "const password = '...'"
+    message: "Hard-coded password found"
+    severity: ERROR
