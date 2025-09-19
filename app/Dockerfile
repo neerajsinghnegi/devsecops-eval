@@ -14,7 +14,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --production=false
 
 # Copy source code
-COPY src ./src
+COPY app/src ./src
 
 # Prune dev dependencies
 RUN npm prune --production
