@@ -21,6 +21,7 @@ env:
 jobs:
   terraform:
     name: Terraform Provisioning
+    environment: devsecops-eval
     runs-on: ubuntu-latest
 
     steps:
@@ -77,7 +78,16 @@ jobs:
       - name: Update kubeconfig for EKS
         run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
+      - uses: actions/download-artifact@v4
+        with:
+          name: image-tag
+
+      - name: Read tag
+        run: echo "IMAGE_TAG=$(cat image_tag.txt)" >> $GITHUB_ENV
+
       - name: Deploy using Helm
-        working-directory: ${{ env.K8S_DIR }}
         run: |
-          helm upgrade --install devsecopstask ./helm
+          helm upgrade --install devsecopstask ./helm \
+            --namespace default \
+            --set image.repository=${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }} \
+            --set image.tag=${{ github.event.inputs.image_tag }}

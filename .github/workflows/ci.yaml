@@ -59,6 +59,12 @@ jobs:
       - name: Push image
         run: |
           docker push ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.run_id }}
+      - name: Save image tag
+        run: echo "pr-${{ github.run_id }}" > image_tag.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image-tag
+          path: image_tag.txt
           
   iac-scan:
     runs-on: ubuntu-latest
