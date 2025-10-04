@@ -89,12 +89,6 @@ module "eks" {
 }
 
 terraform {
-  backend "aws" {
-    bucket  = ""
-    prefix  = "state"
-  }
-}
-terraform {
   backend "s3" {
     bucket         = "tf-devsecops-statefile"
     key            = "eks/terraform.tfstate"
