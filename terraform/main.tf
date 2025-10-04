@@ -90,7 +90,7 @@ module "eks" {
 
 terraform {
   backend "s3" {
-    bucket         = "tf-devsecops-statefile"
+    bucket         = "tfstatefile-devsecops"
     key            = "eks/terraform.tfstate"
     region         = "ap-south-1"
     encrypt        = true
