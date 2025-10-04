@@ -61,8 +61,8 @@ jobs:
   helm:
     name: Helm Deployment
     needs: terraform
-    runs-on: ubuntu-latest
     environment: devsecops-eval
+    runs-on: ubuntu-latest
     if: ${{ github.event.inputs.action == 'apply' }}
 
     steps:
