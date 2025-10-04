@@ -1,0 +1,85 @@
+name: Terraform Provision & Helm Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Select Terraform action"
+        required: true
+        default: "apply"
+        type: choice
+        options:
+          - apply
+          - destroy
+
+env:
+  TF_WORKING_DIR: ./terraform       # path to Terraform code
+  K8S_DIR: ./k8s                   # path to Helm / k8s manifests
+  AWS_REGION: ap-south-1
+  CLUSTER_NAME: democluster
+
+jobs:
+  terraform:
+    name: Terraform Provisioning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan -input=false
+
+      - name: Terraform Apply or Destroy
+        if: ${{ github.event.inputs.action == 'apply' }}
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform destroy -auto-approve
+
+  helm:
+    name: Helm Deployment
+    needs: terraform
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.action == 'apply' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update kubeconfig for EKS
+        run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+      - name: Deploy using Helm
+        working-directory: ${{ env.K8S_DIR }}
+        run: |
+          helm upgrade --install myapp ./chart \
+            --namespace default \
+            --create-namespace

@@ -1,0 +1,23 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp3
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp3
+  resources:
+    requests:
+      storage: 1Gi
+
