@@ -14,7 +14,7 @@ on:
 
 env:
   TF_WORKING_DIR: ./terraform       # path to Terraform code
-  K8S_DIR: ./k8s                   # path to Helm / k8s manifests
+  K8S_DIR: ./helm                   # path to Helm / k8s manifests
   AWS_REGION: ap-south-1
   CLUSTER_NAME: democluster
 
@@ -80,6 +80,4 @@ jobs:
       - name: Deploy using Helm
         working-directory: ${{ env.K8S_DIR }}
         run: |
-          helm upgrade --install myapp ./chart \
-            --namespace default \
-            --create-namespace
+          helm upgrade --install devsecopstask ./helm
