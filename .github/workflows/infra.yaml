@@ -79,9 +79,8 @@ jobs:
       - name: Update kubeconfig for EKS
         run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
-      - uses: actions/download-artifact@v4
-        with:
-          name: image-tag
+      - name: Download image tag from S3
+        run: aws s3 cp s3://devsecopsartifact-tag/image_tag.txt image_tag.txt
 
       - name: Read tag
         run: echo "IMAGE_TAG=$(cat image_tag.txt)" >> $GITHUB_ENV

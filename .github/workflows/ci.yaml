@@ -65,6 +65,8 @@ jobs:
         with:
           name: image-tag
           path: image_tag.txt
+      - name: Save image tag to S3
+        run: aws s3 cp image_tag.txt s3://devsecopsartifact-tag/image_tag.txt
           
   iac-scan:
     runs-on: ubuntu-latest
