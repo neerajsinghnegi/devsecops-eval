@@ -3,6 +3,11 @@
 This repository demonstrates a complete **DevSecOps pipeline** using **GitHub Actions**, **AWS EKS**, **Docker**, and **Terraform**.  
 It integrates multiple **security gates** (SAST, IaC scanning, image scanning) and automates deployment through **Helm**.
 
+<img width="1435" height="520" alt="Screenshot 2025-10-05 at 11 29 50 PM" src="https://github.com/user-attachments/assets/c61f10a4-bc7e-4212-b6b3-34b070edaca7" />
+
+<img width="1435" height="230" alt="image" src="https://github.com/user-attachments/assets/e845f09e-f5b9-4583-97ee-dc7e7fd15eca" />
+
+
 ---
 
 ## 🚀 Features
