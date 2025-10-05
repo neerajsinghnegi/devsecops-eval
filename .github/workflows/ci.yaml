@@ -7,7 +7,7 @@ on:
 
 env:
   IMAGE_NAME: ${{ github.repository }}
-  AWS_REGION: ${{ github.AWS_REGION }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
 
 jobs:
   lint-and-sast:
