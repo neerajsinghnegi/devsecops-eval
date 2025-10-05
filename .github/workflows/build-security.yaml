@@ -1,4 +1,4 @@
-name: CI — Security Gates
+name: Build and Security Scan
 
 on:
   workflow_dispatch:
